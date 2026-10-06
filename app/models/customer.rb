@@ -1,5 +1,5 @@
 class Customer < ActiveRecord::Base
-  KINDS = %w[customer supplier prospect].freeze
+  KINDS = %w[customer supplier prospect].freeze # Why no "revendeur" ? TODO
 
   validates :reference, presence: true, uniqueness: true
   validates :kind, inclusion: { in: KINDS }

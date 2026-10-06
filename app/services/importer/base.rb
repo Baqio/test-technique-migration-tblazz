@@ -15,4 +15,10 @@ class Importer::Base
   def source
     File.basename(path)
   end
+
+  def ensure_headers!(actual, expected)
+    return if actual == expected
+    raise Importer::InvalidFile,
+          "#{source} : en-têtes inattendus (attendus : #{expected.join(', ')} / trouvés : #{actual.join(', ')})"
+  end
 end

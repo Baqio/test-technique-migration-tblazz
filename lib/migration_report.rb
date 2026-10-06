@@ -24,7 +24,21 @@ class MigrationReport
   def warnings = issues.select { |issue| issue.level == :warning }
 
   def to_s
-    raise NotImplementedError
+    lines = []
+    lines << "Lignes lues : #{counters[:read]}"
+    lines << "Importées   : #{counters[:imported]}"
+    lines << "Rejetées    : #{errors.size}"
+    lines << "À vérifier  : #{warnings.size}"
+
+    errors.group_by(&:message).each do |message, group|
+      lines << "  rejet : #{group.size} × #{message}"
+    end
+
+    warnings.group_by(&:message).each do |message, group|
+      lines << "  à vérifier : #{group.size} × #{message}"
+    end
+
+    lines.join("\n")
   end
 
   private
