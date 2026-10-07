@@ -31,17 +31,22 @@ class MigrationReport
     lines << "À vérifier  : #{warnings.size}"
 
     errors.group_by(&:message).each do |message, group|
-      lines << "  rejet : #{group.size} × #{message}"
+      lines << "> rejet : #{group.size} × #{message} #{line_numbers(group)}"
     end
 
     warnings.group_by(&:message).each do |message, group|
-      lines << "  à vérifier : #{group.size} × #{message}"
+      lines << "> à vérifier : #{group.size} × #{message} #{line_numbers(group)}"
     end
 
     lines.join("\n")
   end
 
   private
+
+  def line_numbers(group)
+    numbers = group.map(&:locator).join(", ")
+    "(lignes #{numbers})"
+  end
 
   def add(level, source, locator, message, details)
     @issues << Issue.new(level: level, source: source, locator: locator,
